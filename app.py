@@ -99,7 +99,17 @@ with generator_tab:
             st.caption("Trigram tags are inferred by the role-split Viterbi tagger.")
         elif batch_model == ROLE_SPLIT:
             st.caption("Role states use S for subject, O for object, and P for prepositional phrase.")
-        st.dataframe(rows, hide_index=True, height=290, alt="Generated sentences, tags and pattern validity")
+        st.dataframe(
+            rows,
+            column_order=("Valid pattern", "Sentence", "Tag sequence"),
+            column_config={
+                "Valid pattern": st.column_config.CheckboxColumn(width="small", pinned=True),
+                "Sentence": st.column_config.TextColumn(width="medium"),
+            },
+            hide_index=True,
+            height=290,
+            alt="Generated sentences, tags and pattern validity",
+        )
         st.download_button("Download CSV", to_csv(rows), "generated_sentences.csv", "text/csv", on_click="ignore")
 
 with tagger_tab:
