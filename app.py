@@ -91,9 +91,10 @@ with generator_tab:
             "novel_sentences": "Novelty",
             "distinct_2": "Distinct-2",
         }
-        for column, (key, label) in zip(st.columns(4), labels.items()):
-            value = metrics[key]
-            column.metric(label, f"{value:.3f}" if key == "distinct_2" else f"{value:.1%}", border=True)
+        with st.container(horizontal=True):
+            for key, label in labels.items():
+                value = metrics[key]
+                st.metric(label, f"{value:.3f}" if key == "distinct_2" else f"{value:.1%}", border=True, width=190)
         if batch_model == TRIGRAM:
             st.caption("Trigram tags are inferred by the role-split Viterbi tagger.")
         elif batch_model == ROLE_SPLIT:
@@ -114,4 +115,4 @@ with tagger_tab:
         if unknown:
             st.warning("Outside the training vocabulary: " + ", ".join(unknown))
         tags = tagger.viterbi(words)
-        st.table([tokens, tags], alt="Words with their predicted part-of-speech tags underneath")
+        st.table([tokens, tags], hide_index=True, hide_header=True, alt="Words with their predicted part-of-speech tags underneath")
